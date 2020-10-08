@@ -1,0 +1,170 @@
+﻿@model Task_completion.Models.UserRegistration
+@{
+    ViewBag.Title = "UserRegistration";
+}
+
+<h2>User Registration Form</h2>
+
+<div id="form">
+    <div class="form-group">
+
+        @Html.TextBoxFor(m => m.FirstName, new { @id = "txtFirstName", @class = "form-control", placeholder = "First Name" })
+        @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+
+    </div>
+    <div class="form-group">
+
+        @Html.TextBoxFor(m => m.LastName, new { @id = "txtLastName", @class = "form-control", placeholder = "Last Name" })
+        @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        @Html.TextBoxFor(model => model.Email, new { @id = "txtEmail", @class = "form-control ", placeholder = "Email Name" })
+        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        @Html.TextBoxFor(model => model.MobileNo, new { @id = "txtMobileNo", @class = "form-control ", placeholder = "Mobile Number" })
+        @Html.ValidationMessageFor(model => model.MobileNo, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        @Html.TextBoxFor(model => model.UserName, new { @id = "txtUsername", @class = "form-control ", placeholder = "User Name" })
+        @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        @Html.PasswordFor(model => model.Password, new { @id = "txtPassword", @class = "form-control ", placeholder = "Password" })
+        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        <input type="submit" id="btnSubmit" Name="Submit" class="btn btn-success" />
+
+    </div>
+    @Html.ActionLink("Login", "UserLogin")
+    <div> @ViewBag.Message</div>
+
+</div>
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //var a = $("#txtname").val();
+@*
+        alert("a");
+       $("#txtFirstName").focusout(function () {
+            if ($(this).val() == "") {
+                alert("This first name field is required");
+                $("#txtFirstName").focusin();
+            }
+        });
+        $("#txtLastName").focusout(function () {
+            if ($(this).val() == "") {
+                alert("This last name field is required");
+                $("#txtLastName").focusin();
+            }
+        });
+       $("#txtEmail").focusout(function () {
+           if ($(this).val() == "") {
+               alert("This email field is required");
+               $("#txtEmail").focusin();
+           }
+       });
+       $("#txtMobileNo").focusout(function () {
+           if ($(this).val() == "") {
+               alert("This mobile no field is required");
+               $("#txtMobileNo").focusin();
+           }
+       });
+       $("#txtUsername").focusout(function () {
+           if ($(this).val() == "") {
+               alert("This username field is required");
+               $("#txtUsername").focusin();
+           }
+       });
+       $("#txtPassword").focusout(function () {
+           if ($(this).val() == "") {
+               alert("This password field is required");
+               $("#txtPassword").focusin();
+           }
+       });*@
+            validate();
+            function validate() {
+
+                $("#txtFirstName").focusout(function () {
+                    if ($(this).val() == "") {
+                        alert("This first name field is required");
+                        $('#txtFirstName').css('border-color', 'red');
+                      //  $("#txtFirstName").focusin();
+                    }
+
+                });
+                $("#txtLastName").focusout(function () {
+                    if ($(this).val() == "") {
+                        alert("This last name field is required");
+                        $('#txtFirstName').css('border-color', 'red');
+                        $("#txtLastName").focusin();
+                    }
+                });
+                $("#txtEmail").focusout(function () {
+                    if ($(this).val() == "") {
+                        alert("This email field is required");
+                        $("#txtEmail").focusin();
+                    }
+                });
+                $("#txtMobileNo").focusout(function () {
+                    if ($(this).val() == "") {
+                        alert("This mobile no field is required");
+                        $("#txtMobileNo").focusin();
+                    }
+                });
+                $("#txtUsername").focusout(function () {
+                    if ($("#txtUsername").val().trim() == "") {
+                        alert("This user name field is required");
+                        $('#txtUsername').css('border-color', 'red');
+                    }
+                    else { $('#txtUsername').css('border-color', 'gray'); }
+                });
+
+                $("#txtPassword").focusout(function () {
+                    if ($(this).val() == "") {
+                        alert("This password field is required");
+                        $("#txtPassword").focusin();
+                    }
+                });
+       }
+       $("#btnSubmit").click(function (event){
+            event.preventDefault();
+            validate();
+           var LoginObject = {
+                FirstName: $("#txtFirstName").val(),
+                LastName: $("#txtLastName").val(),
+                MobileNo: $("#txtMobileNo").val(),
+                Email: $("#txtEmail").val(),
+                UserName: $('#txtUsername').val(),
+                Password: $('#txtPassword').val()
+                };
+           $.ajax({
+                    url: '@Url.Action("ValidateUserRegistration")',
+                    data: { 'LoginObject': LoginObject },
+                  //  data:JSON.stringify(LoginObject),
+                    type: "POST",
+                    dataType: "json",
+               success: function (data) {
+                         window.location.href = '@Url.Action("UserLogin", "Login")'
+                         Clear();
+                       alert("done");
+                     },
+                    error: function (data,error) {
+                        alert("Please check credentials");
+                    }
+                });
+       });
+
+
+
+
+            function Clear(){
+                $("#txtUserName").Clear();
+                $("#txtPassword").Clear();
+            }
+
+
+    });
+    </script>
+    }

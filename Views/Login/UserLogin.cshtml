@@ -1,0 +1,100 @@
+﻿@model  Task_completion.Models.UserLogin
+@{
+    ViewBag.Title = "Login Page";
+}
+<div id="form">
+    <div title="Login" class="center-block "><h2>Login</h2></div>
+    <div class="danger bg-danger"><b> @ViewBag.Message</b></div>
+    <div>
+        <div class="form-group center-block">
+            @Html.TextBoxFor(m => m.UserName, new { @id = "txtUserName", @class = "form-control ", placeholder = "User Name" })
+            @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.PasswordFor(m => m.Password, new { @id = "txtPassword", @class = "form-control", placeholder = "Password" })
+            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            <input type="submit" name="Submit" id="btnSubmit" class="btn btn-success " />
+        </div>
+        <div>
+            @Html.ActionLink("Register as a new user", "UserRegistration", new { @class = "form-control center-block" })
+
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript" language="javascript">
+        $(document).ready(function () {
+            $("#txtUserName").focusout(function () {
+                if ($(this).val() == "") {
+                    alert("This user name field is required");
+                    $("#txtUserName").focusin();
+                }
+            });
+            //$("#txtPassword").focusout(function () {
+            //    if ($(this).val() == "") {
+            //        alert("This password field is required");
+            //        $("#txtPassword").focusin();
+            //    }
+            //});
+           // validate();
+
+        $("#btnSubmit").click(function (event){
+            event.preventDefault();
+            validate();
+             var LoginObject = {
+                UserName: $('#txtUserName').val(),
+                Password: $('#txtPassword').val()
+                };
+                $.ajax({
+                    url: '@Url.Action("ValidateUser")',
+                   // data: JSON.stringify(LoginObject),
+                    data: { 'username': LoginObject.UserName, 'password':LoginObject.Password },
+                    type: "POST",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.isRedirect == false) {
+                            alert("User does not exist.Please check the credentials");
+                            Clear();
+                        }
+                        else {
+                            window.location.href = '@Url.Action("Index", "Login")'
+                            Clear();
+                        }
+                     },
+                    error: function (data,error) {
+                        alert("Please check credentials");
+                    }
+                });
+           });
+
+            function validate() {
+                if ($("#txtUserName").val().trim() == "") {
+                    alert("This user name field is required");
+                    $('#txtUserName').css('border-color', 'red');
+
+                }
+                else {
+                    $('#txtUserName').css('border-color', 'gray');
+                }
+                if ($("#txtPassword").val().trim() == "") {
+                    alert("This password field is required");
+                    $('#txtPassword').css('border-color', 'red');
+                }
+                else {
+                    $('#txtPassword').css('border-color', 'gray');
+                }
+
+            }
+
+            function Clear() {
+                $("#txtUserName").Clear();
+                $("#txtPassword").Clear();
+            }
+           
+        });
+    </script>
+}
