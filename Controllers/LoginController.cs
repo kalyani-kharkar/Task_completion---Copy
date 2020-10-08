@@ -13,7 +13,7 @@ namespace Task_completion.Controllers
 
         public ActionResult Index()
         {
-            ViewBag.Message = "welcome " + Session["username"];
+            ViewBag.Message = "Welcome " + Session["username"];
             return View();
         }
         public ActionResult UserLogin()
